@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Example Usage of Reveal.js</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      body { margin: 0; }
+      h2 { margin-top: 0; }
+      p:last-child { margin-bottom: 0; }
+      .sections::after, .sections::before { display: flex; position: fixed; top: 0; right: 0; bottom: 0; left: 0; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.3); height: 15%; color: #fff; content: 'THRESHOLD'; }
+      .sections::before { bottom: auto; }
+      .sections::after { top: auto; }
+      .section { background: #001f3f; padding: 60px 30px; color: #fff; }
+      .section:first-of-type { margin-top: 100vh; }
+      .section:last-of-type { margin-bottom: 100vh; }
+      .section + .section { margin-top: 120px; }
+
+      /* Initial, hidden state */
+      [data-reveal] {
+        -webkit-transform: translateY(20%);
+        transform: translateY(20%);
+        transition: opacity 1s, -webkit-transform 1s;
+        transition: opacity 1s, transform 1s;
+        transition: opacity 1s, transform 1s, -webkit-transform 1s;
+        opacity: 0;
+      }
+
+      /* Final, revealed state */
+      [data-reveal='revealed'] {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Example Usage of Reveal.js</h1>
+    <p>In this example, the threshold to begin the reveal is when the container is 20% into the viewport.</p>
+    <p>Scroll down slowly...</p>
+
+    <div class="sections">
+      <section class="section" data-reveal-container>
+        <h2 data-reveal>Reveal elements as you scroll</h2>
+        <p data-reveal>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra gravida diam vitae luctus. Ut porta consequat pretium. Duis ullamcorper ut urna nec convallis.</p>
+        <p data-reveal>Nam fringilla, enim nec fringilla consectetur, justo felis egestas sapien, et aliquet nulla arcu in dui. Sed lobortis ut diam in rutrum.</p>
+      </section>
+
+      <section class="section" data-reveal-container>
+        <h2 data-reveal="3">Customize the reveal order</h2>
+        <p data-reveal="2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus viverra gravida diam vitae luctus. Ut porta consequat pretium. Duis ullamcorper ut urna nec convallis.</p>
+        <p data-reveal="1">Nam fringilla, enim nec fringilla consectetur, justo felis egestas sapien, et aliquet nulla arcu in dui. Sed lobortis ut diam in rutrum.</p>
+      </section>
+    </div>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="./reveal.ts"></script>
+    <script>
+      reveal({
+        elements: Array.from(document.querySelectorAll('[data-reveal-container]')),
+        delay: 750,
+        rootMargin: '-15% 0%',
+        fastForward: true
+      })
+    </script>
+  </body>
+</html>
