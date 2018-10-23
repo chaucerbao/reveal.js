@@ -1,6 +1,6 @@
 // Dependencies
 import debounce from 'lodash/debounce'
-import pull from 'lodash/pull'
+import pullAll from 'lodash/pullAll'
 
 // Type Definitions
 interface IOptions {
@@ -46,7 +46,7 @@ const createObserver = (options: IOptions) =>
             '[data-reveal]:not([data-reveal="revealed"])'
           )
 
-          queue.push(...Array.from(elements).sort(sortAscending))
+          queue.push.apply(queue, Array.from(elements).sort(sortAscending))
 
           processQueue(options)
         }
@@ -100,7 +100,7 @@ const fastForward = () => {
     elements.forEach(element => revealElement(element, true))
 
     // Remove them from the queue
-    pull(queue, ...elements)
+    pullAll(queue, elements)
   }
 }
 
