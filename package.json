@@ -4,6 +4,12 @@
   "description": "Reveal groups of elements as the user scrolls through your website",
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
+  "main": "src/reveal.ts",
+  "files": [
+    "dist/reveal.js",
+    "dist/reveal.map",
+    "dist/reveal.d.ts"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -34,8 +40,8 @@
     "typescript": "^3.1.3"
   },
   "scripts": {
-    "start": "parcel src/example.html",
-    "build": "npm run clean && parcel build src/reveal.ts",
+    "start": "shx rm -rf dist/ && parcel example/index.html",
+    "build": "shx rm -rf dist/ && tsc && parcel build --global reveal src/reveal.ts",
     "clean": "shx rm -rf .cache/ dist/"
   }
 }

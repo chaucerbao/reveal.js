@@ -1,10 +1,10 @@
 // Type Definitions
 interface IOptions {
   elements: Element[]
-  delay: number
-  rootMargin: string
-  threshold: number | number[]
-  fastForward: boolean
+  delay?: number
+  rootMargin?: string
+  threshold?: number | number[]
+  fastForward?: boolean
 }
 
 // Default Options
@@ -17,7 +17,7 @@ const defaultOptions = {
 }
 
 const queue: Element[] = []
-let intervalHandler: NodeJS.Timeout | null
+let intervalHandler: number | null
 
 const reveal = (userOptions: IOptions) => {
   const options = Object.assign({}, defaultOptions, userOptions)
@@ -140,4 +140,4 @@ const debounce = (callback: () => void, delay: number) => {
 }
 
 // Export
-window.reveal = reveal
+export default reveal
