@@ -1,10 +1,11 @@
 {
-  "name": "reveal.js",
+  "name": "@chaucerbao/reveal.js",
   "version": "0.1.0",
   "description": "Reveal groups of elements as the user scrolls through your website",
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
   "main": "src/reveal.ts",
+  "types": "dist/reveal.d.ts",
   "files": [
     "dist/reveal.js",
     "dist/reveal.map",
