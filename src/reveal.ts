@@ -1,5 +1,4 @@
 // Dependencies
-import debounce from 'lodash/debounce'
 import pullAll from 'lodash/pullAll'
 
 // Type Definitions
@@ -116,6 +115,25 @@ const sortAscending = (elementA: Element, elementB: Element) => {
   if (a > b) return 1
 
   return 0
+}
+
+const debounce = (callback: () => void, delay: number) => {
+  let timeoutHandler: NodeJS.Timeout | null
+
+  return function(this: any) {
+    const context = this
+    const params = arguments
+    const runCallback = function() {
+      callback.apply(context, params)
+      timeoutHandler = null
+    }
+
+    if (timeoutHandler) {
+      clearTimeout(timeoutHandler)
+    }
+
+    timeoutHandler = setTimeout(runCallback, delay)
+  }
 }
 
 // Export
