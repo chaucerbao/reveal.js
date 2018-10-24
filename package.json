@@ -4,6 +4,14 @@
   "description": "Reveal groups of elements as the user scrolls through your website",
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
+  "homepage": "https://github.com/chaucerbao/reveal.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaucerbao/reveal.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chaucerbao/reveal.js/issues"
+  },
   "main": "src/reveal.ts",
   "types": "dist/reveal.d.ts",
   "files": [
