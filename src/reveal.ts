@@ -59,7 +59,7 @@ const processQueue = (options: IOptions) => {
     }
 
     // Reveal the remaining elements on an interval
-    intervalHandler = setInterval(() => {
+    intervalHandler = window.setInterval(() => {
       if (queue.length > 0) {
         revealElement(queue.shift()!)
       }
@@ -75,7 +75,7 @@ const processQueue = (options: IOptions) => {
 const revealElement = (element: Element, isInstant = false) => {
   if (isInstant) {
     element.setAttribute('style', 'transition: none')
-    setTimeout(() => element.removeAttribute('style'), (1 / 60) * 1000)
+    window.setTimeout(() => element.removeAttribute('style'), (1 / 60) * 1000)
   }
 
   element.setAttribute('data-reveal', 'revealed')
@@ -121,7 +121,7 @@ const sortAscending = (elementA: Element, elementB: Element) => {
 }
 
 const debounce = (callback: () => void, delay: number) => {
-  let timeoutHandler: NodeJS.Timeout | null
+  let timeoutHandler: number | null
 
   return function(this: any) {
     const context = this
@@ -135,7 +135,7 @@ const debounce = (callback: () => void, delay: number) => {
       clearTimeout(timeoutHandler)
     }
 
-    timeoutHandler = setTimeout(runCallback, delay)
+    timeoutHandler = window.setTimeout(runCallback, delay)
   }
 }
 
