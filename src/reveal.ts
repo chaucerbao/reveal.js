@@ -1,6 +1,3 @@
-// Dependencies
-import pullAll from 'lodash/pullAll'
-
 // Type Definitions
 interface IOptions {
   elements: Element[]
@@ -99,7 +96,13 @@ const fastForward = () => {
     elements.forEach(element => revealElement(element, true))
 
     // Remove them from the queue
-    pullAll(queue, elements)
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const queueIndex = queue.indexOf(elements[i])
+
+      if (queueIndex > -1) {
+        queue.splice(queueIndex, 1)
+      }
+    }
   }
 }
 
