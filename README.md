@@ -2,7 +2,7 @@
 
 Reveal elements one at a time as the user scrolls through your site.
 
-*Note: This library uses [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver), so a polyfill may be required for some browsers.*
+*Note: This library uses [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), so a polyfill may be required for some browsers.*
 
 ## Usage
 Say you have some content you want to reveal when that section enters into the viewport. Add `data-reveal` to elements you want to include. In this example, `data-reveal-container` is the element that will be watched; when it crosses into the viewport, the `data-reveal` elements will be revealed one at a time.
@@ -54,6 +54,6 @@ Option      | Type               | Default      | Description
 ----------- | ------------------ | ------------ | -----------
 elements    | Element[]          | **Required** | An array of container elements that will be observed
 delay       | number             | 100          | Time in milliseconds between each reveal
-rootMargin  | string             | '0'          | Offset applied to the viewport for calculating an intersection ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#Properties))
-threshold   | number or number[] | 0            | Ratio of intersection area to the viewport ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#Properties))
+rootMargin  | string             | '0'          | Offset applied to the viewport for calculating an intersection ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
+threshold   | number or number[] | 0            | Ratio of intersection area to the viewport ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
 fastForward | boolean            | false        | If true, elements above the viewport are instantly revealed
