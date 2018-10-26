@@ -11,7 +11,7 @@ interface IOptions {
 const defaultOptions = {
   elements: [],
   delay: 100,
-  rootMargin: '0',
+  rootMargin: '0px 0px 0px 0px',
   threshold: 0,
   fastForward: false
 }
