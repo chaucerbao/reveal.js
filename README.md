@@ -1,4 +1,4 @@
-# Reveal.js
+# Reveal.js &middot; ![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/@chaucerbao/reveal.js.svg)
 
 Reveal elements one at a time as the user scrolls through your site.
 
