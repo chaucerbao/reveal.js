@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/chaucerbao/reveal.js/issues"
   },
-  "main": "src/reveal.ts",
+  "main": "dist/reveal.js",
   "types": "dist/reveal.d.ts",
   "files": [
     "dist/reveal.js",
