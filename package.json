@@ -51,6 +51,7 @@
   "scripts": {
     "start": "shx rm -rf dist/ && parcel example/index.html",
     "build": "shx rm -rf dist/ && tsc && parcel build --global reveal src/reveal.ts",
-    "clean": "shx rm -rf .cache/ dist/"
+    "clean": "shx rm -rf .cache/ dist/",
+    "prepublishOnly": "npm run build"
   }
 }
