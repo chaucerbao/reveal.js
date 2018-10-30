@@ -16,7 +16,6 @@
   "types": "dist/reveal.d.ts",
   "files": [
     "dist/reveal.js",
-    "dist/reveal.map",
     "dist/reveal.d.ts"
   ],
   "husky": {
@@ -50,7 +49,7 @@
   },
   "scripts": {
     "start": "shx rm -rf dist/ && parcel example/index.html",
-    "build": "shx rm -rf dist/ && tsc && parcel build --global reveal src/reveal.ts",
+    "build": "shx rm -rf dist/ && tsc && parcel build --no-source-maps --global reveal src/reveal.ts",
     "clean": "shx rm -rf .cache/ dist/",
     "prepublishOnly": "npm run build"
   }
