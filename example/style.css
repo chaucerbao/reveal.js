@@ -20,12 +20,23 @@ body {
   margin: 0;
 }
 
-h2 {
+h2,
+p:first-child {
   margin-top: 0;
 }
 
 p:last-child {
   margin-bottom: 0;
+}
+
+#header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  background: #333;
+  padding: 10px;
+  color: #fff;
 }
 
 .sections::after,
@@ -38,6 +49,7 @@ p:last-child {
   left: 0;
   align-items: center;
   justify-content: center;
+  z-index: 1;
   background: rgba(0, 0, 0, 0.3);
   height: 15%;
   color: #fff;

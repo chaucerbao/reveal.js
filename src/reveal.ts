@@ -1,6 +1,7 @@
 // Type Definitions
 interface IOptions {
   elements: Element[]
+  prepend: Element[]
   delay?: number
   rootMargin?: string
   threshold?: number | number[]
@@ -10,6 +11,7 @@ interface IOptions {
 // Default Options
 const defaultOptions = {
   elements: [],
+  prepend: [],
   delay: 100,
   rootMargin: '0px 0px 0px 0px',
   threshold: 0,
@@ -21,6 +23,9 @@ let intervalHandler: number | null
 
 const reveal = (userOptions: IOptions) => {
   const options = Object.assign({}, defaultOptions, userOptions)
+
+  options.prepend.forEach(element => addToQueue(element))
+
   const observer = createObserver(options)
 
   options.elements.forEach(element => observer.observe(element))
@@ -28,6 +33,8 @@ const reveal = (userOptions: IOptions) => {
   if (options.fastForward) {
     window.addEventListener('scroll', debounce(() => fastForward(), 50))
   }
+
+  setTimeout(() => processQueue(options), 0)
 }
 
 const createObserver = (options: IOptions) =>
@@ -37,18 +44,20 @@ const createObserver = (options: IOptions) =>
         // If the entry is within the threshold
         if (entry.intersectionRatio > 0) {
           observer.unobserve(entry.target)
-
-          const elements = entry.target.querySelectorAll(
-            '[data-reveal]:not([data-reveal="revealed"])'
-          )
-
-          queue.push.apply(queue, Array.from(elements).sort(sortAscending))
-
+          addToQueue(entry.target)
           processQueue(options)
         }
       })
     },
     { rootMargin: options.rootMargin, threshold: options.threshold }
+  )
+
+const addToQueue = (element: Element) =>
+  queue.push.apply(
+    queue,
+    Array.from(
+      element.querySelectorAll('[data-reveal]:not([data-reveal="revealed"])')
+    ).sort(sortAscending)
   )
 
 const processQueue = (options: IOptions) => {
