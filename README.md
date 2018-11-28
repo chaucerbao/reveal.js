@@ -22,9 +22,11 @@ const containers = document.querySelectorAll('[data-reveal-container]')
 
 reveal({
   elements: Array.from(containers),
+  prepend: [document.getElementById('header')], // Header always reveals first
   delay: 750,            // Wait 750ms before revealing the next `data-reveal` element in the container
   rootMargin: '-15% 0%', // Activate when the container is within 15% (of the viewport height)
-  fastForward: true      // Instantly reveal `data-reveal` elements above the viewport
+  fastForward: true,     // Instantly reveal `data-reveal` elements above the viewport
+  onReveal: (element) => console.log('Revealing', element) // Callback to run when revealed
 })
 ```
 
@@ -53,8 +55,9 @@ Available options for `reveal(options)`.
 Option      | Type               | Default           | Description
 ----------- | ------------------ | ----------------- | -----------
 elements    | Element[]          | **Required**      | An array of container elements that will be observed
-prepend     | Element[]          | []                | An array of container elements that will be revealed after initialization
+prepend     | Element[]          | []                | An array of container elements that will be revealed immediately after initialization
 delay       | number             | 100               | Time in milliseconds between each reveal
 rootMargin  | string             | '0px 0px 0px 0px' | Offset applied to the viewport for calculating an intersection ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
 threshold   | number or number[] | 0                 | Ratio of intersection area to the viewport ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
 fastForward | boolean            | false             | If true, elements above the viewport are instantly revealed
+onReveal    | function           | (element) => void | Callback to run when an element is revealed

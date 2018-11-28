@@ -1,11 +1,12 @@
 // Type Definitions
 interface IOptions {
   elements: Element[]
-  prepend: Element[]
+  prepend?: Element[]
   delay?: number
   rootMargin?: string
   threshold?: number | number[]
   fastForward?: boolean
+  onReveal?: (element: Element) => void
 }
 
 // Default Options
@@ -15,7 +16,8 @@ const defaultOptions = {
   delay: 100,
   rootMargin: '0px 0px 0px 0px',
   threshold: 0,
-  fastForward: false
+  fastForward: false,
+  onReveal: () => undefined
 }
 
 const queue: Element[] = []
@@ -31,7 +33,7 @@ const reveal = (userOptions: IOptions) => {
   options.elements.forEach(element => observer.observe(element))
 
   if (options.fastForward) {
-    window.addEventListener('scroll', debounce(() => fastForward(), 50))
+    window.addEventListener('scroll', debounce(() => fastForward(options), 50))
   }
 
   setTimeout(() => processQueue(options), 0)
@@ -64,13 +66,13 @@ const processQueue = (options: IOptions) => {
   if (!intervalHandler) {
     // Reveal the first element in the queue
     if (queue.length > 0) {
-      revealElement(queue.shift()!)
+      revealElement(queue.shift()!, options)
     }
 
     // Reveal the remaining elements on an interval
     intervalHandler = window.setInterval(() => {
       if (queue.length > 0) {
-        revealElement(queue.shift()!)
+        revealElement(queue.shift()!, options)
       }
 
       if (queue.length === 0 && intervalHandler) {
@@ -81,16 +83,24 @@ const processQueue = (options: IOptions) => {
   }
 }
 
-const revealElement = (element: Element, isInstant = false) => {
+const revealElement = (
+  element: Element,
+  options: IOptions,
+  isInstant = false
+) => {
   if (isInstant) {
     element.setAttribute('style', 'transition: none')
     window.setTimeout(() => element.removeAttribute('style'), (1 / 60) * 1000)
   }
 
   element.setAttribute('data-reveal', 'revealed')
+
+  if (typeof options.onReveal === 'function') {
+    options.onReveal(element)
+  }
 }
 
-const fastForward = () => {
+const fastForward = (options: IOptions) => {
   // Find elements above the viewport
   const elements = Array.from(
     document.querySelectorAll('[data-reveal]:not([data-reveal="revealed"])')
@@ -102,7 +112,7 @@ const fastForward = () => {
 
   if (elements.length > 0) {
     // Display them instantly
-    elements.forEach(element => revealElement(element, true))
+    elements.forEach(element => revealElement(element, options, true))
 
     // Remove them from the queue
     for (let i = elements.length - 1; i >= 0; i--) {

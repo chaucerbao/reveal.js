@@ -7,5 +7,6 @@ reveal({
   prepend: [document.getElementById('header')],
   delay: 750,
   rootMargin: '-15% 0%',
-  fastForward: true
+  fastForward: true,
+  onReveal: (element) => console.log('Revealing', element)
 })
