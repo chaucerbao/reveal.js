@@ -1,5 +1,5 @@
 // Type Definitions
-interface IOptions {
+interface Options {
   elements: Element[]
   prepend?: Element[]
   delay?: number
@@ -17,32 +17,35 @@ const defaultOptions = {
   rootMargin: '0px 0px 0px 0px',
   threshold: 0,
   fastForward: true,
-  onReveal: () => undefined
+  onReveal: () => undefined,
 }
 
 const queue: Element[] = []
 let intervalHandler: number | null
 
-const reveal = (userOptions: IOptions) => {
+const reveal = (userOptions: Options) => {
   const options = Object.assign({}, defaultOptions, userOptions)
 
-  options.prepend.forEach(element => addToQueue(element))
+  options.prepend.forEach((element) => addToQueue(element))
 
   const observer = createObserver(options)
 
-  options.elements.forEach(element => observer.observe(element))
+  options.elements.forEach((element) => observer.observe(element))
 
   if (options.fastForward) {
-    window.addEventListener('scroll', debounce(() => fastForward(options), 50))
+    window.addEventListener(
+      'scroll',
+      debounce(() => fastForward(options), 50)
+    )
   }
 
   setTimeout(() => processQueue(options), 0)
 }
 
-const createObserver = (options: IOptions) =>
+const createObserver = (options: Options) =>
   new IntersectionObserver(
     (entries, observer) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         // If the entry is within the threshold
         if (entry.intersectionRatio > 0) {
           observer.unobserve(entry.target)
@@ -62,7 +65,7 @@ const addToQueue = (element: Element) =>
     ).sort(sortAscending)
   )
 
-const processQueue = (options: IOptions) => {
+const processQueue = (options: Options) => {
   if (!intervalHandler) {
     // Reveal the first element in the queue
     if (queue.length > 0) {
@@ -85,7 +88,7 @@ const processQueue = (options: IOptions) => {
 
 const revealElement = (
   element: Element,
-  options: IOptions,
+  options: Options,
   isInstant = false
 ) => {
   if (isInstant) {
@@ -100,11 +103,11 @@ const revealElement = (
   }
 }
 
-const fastForward = (options: IOptions) => {
+const fastForward = (options: Options) => {
   // Find elements above the viewport
   const elements = Array.from(
     document.querySelectorAll('[data-reveal]:not([data-reveal="revealed"])')
-  ).filter(element => {
+  ).filter((element) => {
     const elementRect = element.getBoundingClientRect()
 
     return elementRect.top + elementRect.height < 0
@@ -112,7 +115,7 @@ const fastForward = (options: IOptions) => {
 
   if (elements.length > 0) {
     // Display them instantly
-    elements.forEach(element => revealElement(element, options, true))
+    elements.forEach((element) => revealElement(element, options, true))
 
     // Remove them from the queue
     for (let i = elements.length - 1; i >= 0; i--) {
@@ -142,11 +145,10 @@ const sortAscending = (elementA: Element, elementB: Element) => {
 const debounce = (callback: () => void, delay: number) => {
   let timeoutHandler: number | null
 
-  return function(this: any) {
+  return function (this: any) {
     const context = this
-    const params = arguments
-    const runCallback = function() {
-      callback.apply(context, params)
+    const runCallback = function () {
+      callback.apply(context, [])
       timeoutHandler = null
     }
 
