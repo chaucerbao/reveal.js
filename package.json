@@ -1,6 +1,6 @@
 {
   "name": "@chaucerbao/reveal.js",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Reveal groups of elements as the user scrolls through your website",
   "author": "Alvin Chan <no@email.com>",
   "license": "ISC",
