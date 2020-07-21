@@ -59,5 +59,5 @@ prepend     | Element[]          | []                | An array of container ele
 delay       | number             | 100               | Time in milliseconds between each reveal
 rootMargin  | string             | '0px 0px 0px 0px' | Offset applied to the viewport for calculating an intersection ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
 threshold   | number or number[] | 0                 | Ratio of intersection area to the viewport ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Creating_an_intersection_observer))
-fastForward | boolean            | false             | If true, elements above the viewport are instantly revealed
+fastForward | boolean            | true              | If true, elements above the viewport are instantly revealed
 onReveal    | function           | (element) => void | Callback to run when an element is revealed

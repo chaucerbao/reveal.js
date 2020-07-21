@@ -16,7 +16,7 @@ const defaultOptions = {
   delay: 100,
   rootMargin: '0px 0px 0px 0px',
   threshold: 0,
-  fastForward: false,
+  fastForward: true,
   onReveal: () => undefined
 }
 
@@ -159,4 +159,4 @@ const debounce = (callback: () => void, delay: number) => {
 }
 
 // Export
-export default reveal
+module.exports = reveal
