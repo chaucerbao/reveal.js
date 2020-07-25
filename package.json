@@ -1,0 +1,58 @@
+{
+  "name": "reveal.js",
+  "version": "0.3.0",
+  "description": "",
+  "keywords": [],
+  "main": "dist/reveal.js",
+  "types": "dist/reveal.d.ts",
+  "files": [
+    "dist/reveal.js",
+    "dist/reveal.d.ts"
+  ],
+  "author": "Alvin Chan <no@email.com>",
+  "license": "ISC",
+  "browserslist": [
+    "defaults"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "@chaucerbao"
+    ],
+    "parserOptions": {
+      "project": "tsconfig.json"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{html,md}": [
+      "prettier --write"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "@chaucerbao/eslint-config": "^0.4.0",
+    "@types/node": "^14.0.26",
+    "eslint": "^7.5.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "start": "npm run clean; parcel --global reveal examples/index.html",
+    "build": "npm run clean; parcel build --global reveal --no-source-maps src/reveal.ts && tsc --emitDeclarationOnly",
+    "clean": "rm -rf .cache dist"
+  }
+}

@@ -1,0 +1,197 @@
+<html>
+  <head>
+    <style>
+      /* Hidden */
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s, transform 0.5s;
+      }
+
+      /* Revealed */
+      [data-revealed] {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* A different reveal for the header */
+      .header[data-reveal] {
+        transform: translateY(-100%);
+      }
+
+      .header[data-revealed] {
+        transform: translateY(0);
+      }
+
+      /* Styling for this example page */
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+        line-height: 1.25;
+      }
+
+      h1,
+      h2 {
+        padding: 15px 0;
+      }
+
+      h1 {
+        margin: 0;
+        padding: 15px;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      .height-1\/2 {
+        height: 50vh;
+      }
+
+      .header__placeholder {
+        height: 80px;
+      }
+
+      .header {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+        background-color: #5e81ac;
+        color: #fff;
+      }
+
+      .instruction {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 30px;
+        text-align: center;
+      }
+
+      @media (min-width: 768px) {
+        .instruction {
+          margin: auto;
+          max-width: 60%;
+        }
+      }
+
+      .section {
+        display: block;
+        padding: 15px;
+        background-color: #eceff4;
+        color: #3b4252;
+      }
+
+      .section > :first-child {
+        margin-top: 0;
+      }
+
+      .section > :last-child {
+        margin-bottom: 0;
+      }
+
+      .section:nth-of-type(even) {
+        background-color: #3b4252;
+        color: #eceff4;
+      }
+
+      .threshold {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 15%;
+        background-color: rgba(0, 0, 0, 0.35);
+        color: #fff;
+      }
+
+      .threshold--top {
+        top: 0;
+      }
+
+      .threshold--bottom {
+        bottom: 0;
+      }
+    </style>
+
+    <script src="../src/reveal.ts"></script>
+  </head>
+
+  <body>
+    <div class="header__placeholder">
+      <header>
+        <div class="header" data-reveal>
+          <h1>Reveal Examples</h1>
+        </div>
+      </header>
+    </div>
+
+    <div class="instruction height-1/2">
+      Scroll down slowly... elements will reveal once its container crosses the
+      Bottom Threshold.
+    </div>
+
+    <section class="section">
+      <h2 data-reveal>Reveal elements one at a time</h2>
+      <div class="section__content">
+        <p data-reveal>First</p>
+        <p data-reveal>Second</p>
+        <p data-reveal>Third</p>
+      </div>
+    </section>
+
+    <div class="instruction height-1/2">
+      In this example, the threshold is set 15% into the viewport. The visual
+      guidelines at the top and bottom of this page will help you see when a
+      reveal will kick in.
+    </div>
+
+    <section class="section">
+      <h2 data-reveal>Reveal in any order</h2>
+      <div class="section__content">
+        <p data-reveal="2">Second</p>
+        <p data-reveal="3">Third</p>
+        <p data-reveal="1">First</p>
+      </div>
+    </section>
+
+    <div class="instruction height-1/2">
+      Elements above the Top Threshold will be revealed instantly. Scrolling
+      back up will hide the revealed elements so that they can be revealed
+      again.
+    </div>
+
+    <div class="threshold threshold--top">Top Threshold</div>
+    <div class="threshold threshold--bottom">Bottom Threshold</div>
+
+    <script>
+      reveal({
+        elements: document.querySelectorAll('.section'),
+        prepend: document.querySelectorAll('header'),
+        rootMargin: '-15% 0%',
+        interval: 750,
+      })
+    </script>
+  </body>
+</html>
