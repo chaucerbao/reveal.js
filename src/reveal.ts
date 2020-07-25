@@ -10,52 +10,12 @@ interface RevealElement {
   element: Element
 }
 
-interface State {
-  queue: RevealElement[]
-  intervalHandler?: number
-}
-
-interface ActionWithPayload<T> {
-  type: string
-  payload: T
-}
-
-interface ActionWithoutPayload {
-  type: string
-}
-
-interface AddToQueueAction extends ActionWithPayload<RevealElement[]> {
-  type: 'ADD_TO_QUEUE'
-}
-
-interface RemoveFromQueueAction extends ActionWithPayload<string> {
-  type: 'REMOVE_FROM_QUEUE'
-}
-
-interface UnshiftQueue extends ActionWithoutPayload {
-  type: 'UNSHIFT_QUEUE'
-}
-
-interface SetIntervalHandlerAction extends ActionWithPayload<number> {
-  type: 'SET_INTERVAL_HANDLER'
-}
-
-interface ClearIntervalHandlerAction extends ActionWithoutPayload {
-  type: 'CLEAR_INTERVAL_HANDLER'
-}
-
-type Action =
-  | AddToQueueAction
-  | RemoveFromQueueAction
-  | UnshiftQueue
-  | SetIntervalHandlerAction
-  | ClearIntervalHandlerAction
-
-interface Store {
-  _state: State
-  getState: () => State
-  reducer: (state: State, action: Action) => State
-  dispatch: (action: Action) => void
+interface Queue {
+  _state: RevealElement[]
+  getState: () => RevealElement[]
+  add: (revealElements: RevealElement[]) => void
+  remove: (parentId: string) => void
+  shift: () => RevealElement | undefined
 }
 
 // Constants
@@ -69,46 +29,27 @@ const REVEALED_SELECTOR = '[data-revealed]'
 const UNREVEALED_SELECTOR = '[data-reveal]:not([data-revealed])'
 
 // Store
-const store: Store = {
-  _state: {
-    queue: [],
-  },
-
+const queue: Queue = {
+  _state: [],
   getState: function () {
-    return { ...this._state }
+    return this._state.slice()
   },
-
-  reducer: function (state, action) {
-    switch (action.type) {
-      case 'ADD_TO_QUEUE':
-        return { ...state, queue: state.queue.concat(action.payload) }
-
-      case 'REMOVE_FROM_QUEUE':
-        return {
-          ...state,
-          queue: state.queue.filter(
-            ({ parentId }) => parentId !== action.payload
-          ),
-        }
-
-      case 'UNSHIFT_QUEUE':
-        return { ...state, queue: state.queue.slice(1) }
-
-      case 'SET_INTERVAL_HANDLER':
-        return { ...state, intervalHandler: action.payload }
-
-      case 'CLEAR_INTERVAL_HANDLER':
-        return { ...state, intervalHandler: undefined }
-
-      default:
-        return state
-    }
+  add: function (revealElements) {
+    this._state = this.getState().concat(revealElements)
   },
-
-  dispatch: function (action) {
-    this._state = this.reducer(this.getState(), action)
+  remove: function (containerId) {
+    this._state = this.getState().filter(
+      ({ parentId }) => parentId !== containerId
+    )
+  },
+  shift: function () {
+    const state = this.getState()
+    this._state = state.slice(1)
+    return state[0]
   },
 }
+
+let intervalHandler: number | undefined
 
 // Helpers
 const uniqueId = () =>
@@ -144,7 +85,7 @@ const displayElement = (
     window.requestAnimationFrame(restoreStyle)
 
     window.requestAnimationFrame(() => {
-      element.setAttribute('style', `${style}; transition: none;`)
+      element.setAttribute('style', `${style || ''}; transition: none;`)
       isTransitionDisabled = true
       updateDisplay()
     })
@@ -167,25 +108,20 @@ const containerToRevealElements = (container: Element): RevealElement[] => {
 }
 
 const revealNextElement = (options: RevealOptions) => {
-  const { queue, intervalHandler } = store.getState()
-  const [revealElement] = queue
+  const revealElement = queue.shift()
 
   if (revealElement) {
-    store.dispatch({ type: 'UNSHIFT_QUEUE' })
     displayElement(revealElement.element, 'show')
 
     if (typeof intervalHandler === 'undefined') {
-      store.dispatch({
-        type: 'SET_INTERVAL_HANDLER',
-        payload: window.setInterval(
-          () => revealNextElement(options),
-          options.interval
-        ),
-      })
+      intervalHandler = window.setInterval(
+        () => revealNextElement(options),
+        options.interval
+      )
     }
   } else {
     window.clearInterval(intervalHandler)
-    store.dispatch({ type: 'CLEAR_INTERVAL_HANDLER' })
+    intervalHandler = undefined
   }
 }
 
@@ -205,21 +141,14 @@ const revealObserver = (options: RevealOptions) =>
   new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        store.dispatch({
-          type: 'ADD_TO_QUEUE',
-          payload: containerToRevealElements(entry.target),
-        })
+        queue.add(containerToRevealElements(entry.target))
 
         // Start revealing elements, if it hasn't started yet
-        if (typeof store.getState().intervalHandler === 'undefined')
-          revealNextElement(options)
+        if (typeof intervalHandler === 'undefined') revealNextElement(options)
       }
 
       if (!entry.isIntersecting && entryScrolledFrom('top', entry)) {
-        store.dispatch({
-          type: 'REMOVE_FROM_QUEUE',
-          payload: entry.target.getAttribute('data-reveal-id') || '',
-        })
+        queue.remove(entry.target.getAttribute('data-reveal-id') || '')
 
         // Reveal the elements immediately
         Array.from(
@@ -239,10 +168,7 @@ const viewportObserver = () =>
           entry.target.querySelectorAll(REVEALED_SELECTOR)
         ).forEach((element) => displayElement(element, 'hide', true))
 
-        store.dispatch({
-          type: 'REMOVE_FROM_QUEUE',
-          payload: entry.target.getAttribute('data-reveal-id') || '',
-        })
+        queue.remove(entry.target.getAttribute('data-reveal-id') || '')
       }
 
       // If the container is above the viewport
@@ -252,10 +178,7 @@ const viewportObserver = () =>
           entry.target.querySelectorAll(UNREVEALED_SELECTOR)
         ).forEach((element) => displayElement(element, 'show', true))
 
-        store.dispatch({
-          type: 'REMOVE_FROM_QUEUE',
-          payload: entry.target.getAttribute('data-reveal-id') || '',
-        })
+        queue.remove(entry.target.getAttribute('data-reveal-id') || '')
       }
     })
   })
@@ -271,10 +194,7 @@ const reveal = (options: RevealOptions) => {
 
   if (options.prepend) {
     options.prepend.forEach((container) =>
-      store.dispatch({
-        type: 'ADD_TO_QUEUE',
-        payload: containerToRevealElements(container),
-      })
+      queue.add(containerToRevealElements(container))
     )
 
     revealNextElement(options)
